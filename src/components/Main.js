@@ -10,7 +10,25 @@ import { FaEdit, FaWindowClose } from 'react-icons/fa';
 export default class Main extends Component {
   state = {
     novaTarefa: '',
-    tarefas: ['Fazer café', 'Estudar React', 'Fazer exercícios'],
+    tarefas: [],
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault(); // Evita o comportamento padrão do form
+    const { tarefas } = this.state;
+    let { novaTarefa } = this.state; // Usando let para permitir reatribuição
+    novaTarefa = novaTarefa.trim(); // Remove espaços em branco
+
+    if (tarefas.indexOf(novaTarefa) !== -1) {
+      alert('Tarefa já existe');
+      return;
+    }
+
+    const novasTarefas = [...tarefas];
+
+    this.setState({
+      tarefas: [...novasTarefas, novaTarefa],
+    });
   };
 
   handleChange = (e) => {
@@ -26,7 +44,7 @@ export default class Main extends Component {
       <div className="main">
         <h1>Lista de Tarefas</h1>
 
-        <form action="#" className="form">
+        <form onSubmit={this.handleSubmit} action="#" className="form">
           <input onChange={this.handleChange} type="text" value={novaTarefa} />
           <button type="submit">
             <FaPlus />
@@ -37,10 +55,10 @@ export default class Main extends Component {
           {tarefas.map((tarefa) => (
             <li key={tarefa}>
               {tarefa}
-              <div>
+              <span>
                 <FaEdit className="edit" />
                 <FaWindowClose className="delete" />
-              </div>
+              </span>
             </li>
           ))}
         </ul>
